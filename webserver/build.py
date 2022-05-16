@@ -7,6 +7,8 @@ import time
 import redis
 import pickle
 import json
+from werkzeug import serving
+import ssl
 
 #from webserver.database import drone
 
@@ -74,4 +76,9 @@ def get_drones():
     return jsonify(drone_dict)
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0', port='5000')
+    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    context.verify_mode = ssl.CERT_REQUIRED
+    context.load_verify_locations("../certs/CA/ca.crt")   #Vi litar på klienter med certifikat signerat av CA.
+    context.load_cert_chain("../certs/servers/servers.crt", "servers.key")
+    serving.run_simple("0.0.0.0", 5000, app, ssl_context=context)
+    #app.run(debug=True, host='0.0.0.0', port='5000')

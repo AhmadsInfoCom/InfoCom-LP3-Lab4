@@ -6,6 +6,7 @@ What does the OpenSSL switch -CAcreateserial do?
 #1. Creates a self-signed CA certificate (including public key), and a private key stored in 'privkey.pem'
 
 openssl req -x509 -out ca.crt   
+openssl req -x509 -out fakeca.crt   
 
 When signing a document the CA needs a serial number for the signing, if a
 serial number file doesn’t exist, the -CAcreateserial creates one. If it is used in
@@ -15,7 +16,11 @@ combination with -CA the initial serial number is set to a random one.
 
 
 DRONEPROJECT:
-Skapade filen privkey.pm och ca.crt i mappen CA/server
+Skapade filen privkey.pm och ca.crt i mappen certs/CA
+PEM pass phrase: servercertCA
+Name: CA
+
+Skapade filen privkey.pm och fakeca.crt i mappen certs/CA
 PEM pass phrase: servercertCA
 Name: CA
 
@@ -33,21 +38,20 @@ file clienttruststore (no file extension) and set the password to password.
 keytool -importcert -keystore clienttruststore -storepass password -alias cacert -file ca.crt
 
 DRONEPROJECT:
-Skapade i mappen CA/server:
+Skapat med keytool i mappen certs/server:
 name: servertruststore 
 password: servertruststore
 keystore entrynamn dvs alias: cacert
 och detta alias hämtade keystore från filen ca.crt
 
-DRONEPROJECT:
-Skapade i mappen CA/drone1 (egentligen i server, men flyttade sen till drone1)
+Skapat med keytool i mappen certs/drone1 (egentligen i server, men flyttade sen till drone1):
 name: drone1truststore 
 password: drone1truststore
 keystore entrynamn dvs alias: cacert
 och detta alias hämtade keystore från filen ca.crt
 
-
-
+Med OpenSSL:
+Behövdes inte skapa en truststore, eftersom vi direkt specificerar våra filer till werkzeugs SSLcontext, i.e. context.load_cert_chain(*certpath*, *keypath*))
 
 
 
@@ -64,12 +68,15 @@ password to password.
 
 keytool -genkeypair -keystore clientkeystore -storepass password -alias clientkeypair -keyalg RSA
 
-
+DRONEPROJECT:
+Skapat med keytool i certs/server och certs/drone:
 Name: Drone 1
 Organisation: Secure Drone Deliveries
 password: drone1keystore
 
-
+Med OpenSSL i mappen certs/server och certs/drone:
+openssl genrsa -out servers.key 2048
+openssl genrsa -out drones.key 2048
 
 
 
@@ -85,11 +92,11 @@ keytool -certreq -keystore clientkeystore -storepass password -alias clientkeypa
 
 
 DRONEPROJECT:
-klarrrrrrrrrrrt , drone1.crt producerad
+Med keytool: som ovan men bytt namn på grejer , drone1.crt producerad
 
-
-
-
+Med OpenSSL i mappen certs/server och certs/drone:
+openssl req -new -key servers.key -out servers.csr     , challenge password blev: serverspassword
+openssl req -new -key drones.key -out drones.csr     , challenge password blev: dronespassword
 
 
 
@@ -99,13 +106,15 @@ klarrrrrrrrrrrt , drone1.crt producerad
 #5. Processes the certificate request.
 openssl x509 -req -in client.csr -out client.crt -CA ca.crt -CAkey privkey.pem -CAcreateserial
 
+
 DRONEPROJECT:
-klarrrt
-
-
-
-
-
+klarrrt, både för keytool-genererade certet och openssl-genererade. Nedan är namnen för open-ssl-genererade certifikaten:
+openssl x509 -req -in servers.csr -out servers.crt -CA ../CA/ca.crt -CAkey ../CA/privkey.pem -CAcreateserial 
+openssl x509 -req -in drones.csr -out drones.crt -CA ../CA/ca.crt -CAkey ../CA/privkey.pem -CAcreateserial 
+OBS! för att installrea dessa i en web browser måste du baka in dem i pkcs12:
+openssl pkcs12 -export -in servers.crt -inkey servers.key -out servers.p12
+openssl pkcs12 -export -in drones.crt -inkey drones.key -out drones.p12
+satte inget export password på någon av dem, utan klickade bara enter.
 
 
 

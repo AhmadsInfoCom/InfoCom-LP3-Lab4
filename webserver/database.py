@@ -2,14 +2,15 @@ from flask import Flask, request
 from flask_cors import CORS
 import redis
 import json
-
+from werkzeug import serving
+import ssl
 
 app = Flask(__name__)
 CORS(app)
 
 # change this to connect to your redis server
 # ===============================================
-redis_server = redis.Redis(host='localhost', port=6379, decode_responses=True, charset="unicode_escape")    # Gissar på detta, vi kör ju det här skriptet på localhost (server pi). Stod från början: redis.Redis("REDIS_SERVER", decode_responses=True, charset="unicode_escape")
+redis_server = redis.Redis(host='localhost', port=6379, decode_responses=True, charset="unicode_escape", password='SDD')    # Gissar på detta, vi kör ju det här skriptet på localhost (server pi). Stod från början: redis.Redis("REDIS_SERVER", decode_responses=True, charset="unicode_escape")
 # ===============================================
 
 @app.route('/drone', methods=['POST'])
@@ -62,6 +63,9 @@ def drone():
     return 'Get data'
 
 if __name__ == "__main__":
-
-
-    app.run(debug=True, host='0.0.0.0', port='5001')
+        context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    context.verify_mode = ssl.CERT_REQUIRED
+    context.load_verify_locations("../certs/CA/ca.crt")   #Vi litar på klienter med certifikat signerat av CA.
+    context.load_cert_chain("../certs/servers/servers.crt", "../certs/servers/servers.key")
+    serving.run_simple("0.0.0.0", 5001, app, use_debugger=True, ssl_context=context)
+    #app.run(debug=True, host='0.0.0.0', port='5001')

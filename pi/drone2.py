@@ -3,7 +3,8 @@ from flask_cors import CORS
 import subprocess
 import  requests
 import os
-
+from werkzeug import serving
+import ssl
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
@@ -78,4 +79,9 @@ def main():
     return 'New route received'
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    context.verify_mode = ssl.CERT_REQUIRED
+    context.load_verify_locations("../certs/CA/ca.crt")   #Vi litar på klienter med certifikat signerat av CA.
+    context.load_cert_chain("../certs/drones/drones.crt", "../certs/drones/drones.key")
+    serving.run_simple("0.0.0.0", app, use_debugger=True, ssl_context=context)
+    #app.run(debug=True, host='0.0.0.0')
