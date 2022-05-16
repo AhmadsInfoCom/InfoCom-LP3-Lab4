@@ -14,6 +14,11 @@ import ssl
 
 HTTPS_ENABLED = True
 VERIFY_USER=False,
+
+API_CRT="servers.crt"
+API_KEY="servers.key"
+API_CA_T="ca.crt"
+
 app = Flask(__name__)
 CORS(app)
 app.secret_key = 'dljsaklqk24e21cjn!Ew@@dsa5'
@@ -78,9 +83,14 @@ def get_drones():
     return jsonify(drone_dict)
 
 if __name__ == "__main__":
-    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_3)
-    #context.verify_mode = ssl.CERT_REQUIRED
-    #context.load_verify_locations("../certs/CA/ca.crt")   #Vi litar på klienter med certifikat signerat av CA.
-    context.load_cert_chain('servers.crt', 'servers.key')
+    context = None
+    if HTTPS_ENABLED:
+        context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_3)
+        if VERIFY_USER:
+            context.verify_mode = ssl.CERT_REQUIRED
+            context.load_verify_locations("../certs/CA/ca.crt")   #Vi litar på klienter med certifikat signerat av CA.
+    try:
+        context.load_cert_chain('servers.crt', 'servers.key')
+        sys.exit("Error starting flask server. " + "Missing cert or key.".format(e))
     serving.run_simple("0.0.0.0", 5000, app, ssl_context=context)
     #app.run(debug=True, host='0.0.0.0', port='5000')
