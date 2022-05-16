@@ -20,9 +20,9 @@ Skapade filen privkey.pm och ca.crt i mappen certs/CA
 PEM pass phrase: servercertCA
 Name: CA
 
-Skapade filen privkey.pm och fakeca.crt i mappen certs/CA
-PEM pass phrase: servercertCA
-Name: CA
+Skapade filen privkey.pm och fakeca.crt i mappen certs/fakeCA
+PEM pass phrase: fakeCA
+Name: fakeCA
 
 
 
