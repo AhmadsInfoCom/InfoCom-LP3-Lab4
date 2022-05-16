@@ -84,4 +84,3 @@ if __name__ == "__main__":
     context.load_cert_chain("../certs/servers/servers.crt", "../certs/servers/servers.key")
     serving.run_simple("0.0.0.0", 5002, app, use_debugger=True, ssl_context=context)
     #app.run(debug=True, host='0.0.0.0', port='5002')
-    
