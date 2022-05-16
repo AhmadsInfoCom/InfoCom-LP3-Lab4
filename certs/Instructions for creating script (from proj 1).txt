@@ -1,0 +1,224 @@
+
+1. Create a X.509 CA certificate using OpenSSL. Set the commonName (CN) field of the certificate
+to CA for clarity. Make sure to save the private key of the CA in a file. 
+What does the OpenSSL switch -CAcreateserial do?
+
+#1. Creates a self-signed CA certificate (including public key), and a private key stored in 'privkey.pem'
+
+openssl req -x509 -out ca.crt   
+
+When signing a document the CA needs a serial number for the signing, if a
+serial number file doesn’t exist, the -CAcreateserial creates one. If it is used in
+combination with -CA the initial serial number is set to a random one.
+
+
+
+
+DRONEPROJECT:
+Skapade filen privkey.pm och ca.crt i mappen CA/server
+PEM pass phrase: servercertCA
+Name: CA
+
+
+
+
+
+
+
+2. Use keytool to create a truststore that contains the CA certificate (and nothing else). Name the
+file clienttruststore (no file extension) and set the password to password.
+
+#2. Reads the certificate or certificate chain [...] from the file [ca.crt], and stores it in the keystore entry identified by #alias.
+
+keytool -importcert -keystore clienttruststore -storepass password -alias cacert -file ca.crt
+
+DRONEPROJECT:
+Skapade i mappen CA/server:
+name: servertruststore 
+password: servertruststore
+keystore entrynamn dvs alias: cacert
+och detta alias hämtade keystore från filen ca.crt
+
+DRONEPROJECT:
+Skapade i mappen CA/drone1 (egentligen i server, men flyttade sen till drone1)
+name: drone1truststore 
+password: drone1truststore
+keystore entrynamn dvs alias: cacert
+och detta alias hämtade keystore från filen ca.crt
+
+
+
+
+
+
+
+
+
+3.Use keytool to create an end-user keypair that is stored in a (client-side) keystore. Use your full
+names and STIL identities for the CN field1 for the certificate; X/X/X/X, where
+X = <FULL NAME> (<STIL-id>)
+for each respective group member. Name the file clientkeystore (no file extension) and set the
+password to password.
+
+#3. Generates a key pair (a public key and associated private key). Wraps the public key into an X.509 v3 self-signed certificate, which is stored as a single-element certificate chain. This certificate chain and the private key are stored in a new keystore entry identified by alias. 
+
+keytool -genkeypair -keystore clientkeystore -storepass password -alias clientkeypair -keyalg RSA
+
+
+Name: Drone 1
+Organisation: Secure Drone Deliveries
+password: drone1keystore
+
+
+
+
+
+
+
+
+
+4. Use keytool to create a Certificate Signing Request (CSR) for the keys created in the previous step.
+A CSR can be seen as a blueprint of a certificate that has not been signed yet.
+
+#4. Generates a Certificate Signing Request (CSR) [...]. A CSR is intended to be sent to a certificate authority (CA). The CA will #authenticate the certificate requestor (usually off-line) and will return a certificate or certificate chain, used to replace the #existing certificate chain (which initially consists of a self-signed certificate) in the keystore. 
+keytool -certreq -keystore clientkeystore -storepass password -alias clientkeypair -file client.csr
+
+
+DRONEPROJECT:
+klarrrrrrrrrrrt , drone1.crt producerad
+
+
+
+
+
+
+
+
+5. Use OpenSSL to let your CA (from step 1) sign the CSR.
+
+#5. Processes the certificate request.
+openssl x509 -req -in client.csr -out client.crt -CA ca.crt -CAkey privkey.pem -CAcreateserial
+
+DRONEPROJECT:
+klarrrt
+
+
+
+
+
+
+
+
+
+6. Import the certificate chain into your keystore. Note that you should import the CA certificate
+before you import the signed certificate
+
+#6. 
+keytool -importcert -keystore clientkeystore -storepass password -alias cacert -file ca.crt
+keytool -importcert -keystore clientkeystore -storepass password -alias clientkeypair -file client.crt
+
+
+
+
+
+
+
+
+
+
+7.Use keytool to verify that a certificate chain has been established. Your keystore should contain
+TWO entries;
+a) one CA certificate,
+b) one certificate chain of length 2, consisting of the CA certificate and the signed certificate.
+The command “keytool -list -v ...” is appropriate
+
+#7
+keytool -list -v -keystore clientkeystore
+
+
+
+
+
+
+
+8.Both keytool and OpenSSL typically generate X.509 version 3 CA certificates. But the certificates
+that you have created for your server and client are most likely X.509 version 1 certificates. 
+
+#8 
+-extfile v3.ext
+-ext
+
+Question B: How can you tell keytool to generate a CSR for an X.509 version 3 client certificate (at
+step 4), or tell OpenSSL to force generation of a version 3 certificate (at step 5)? 
+
+B:
+By using extensions the certificate is forced to be of version 3 since only x509 ver-
+sion 3 has extensions. By default keytool generates the CSR as a version 3 certifi-
+cate with extensions. Therefore in step 4 no extra options are needed. However,
+when the CSR is signed by the CA (openssl) the extensions are dropped and
+the signed certificate is changed to version 1 if not specified in an extentions file
+(-extfile).
+
+
+Question C:
+What are extensions and what can they contain?
+
+C:
+Extra information in an x509 v3 certificate such as if the certificate is from a
+CA, what use cases the key is allowed for, comments etc.
+
+
+
+
+
+
+
+9.Follow steps 3 through 7 above to create a server-side keystore. Name the file serverkeystore (no
+file extension) and set the password to password. Use CN=MyServer for the server certificate.
+
+#9.
+keytool -genkeypair -keystore serverkeystore -storepass password -alias serverkeypair -keyalg RSA -dname "cn=MyServer, ou=aDepartment, o=aCompany, l=aCity, s=aRegion, c=SE"
+
+keytool -certreq -keystore serverkeystore -storepass password -alias serverkeypair -file server.csr
+
+openssl x509 -req -in server.csr -out server.crt -CA ca.crt -CAkey privkey.pem -CAserial ca.srl
+
+keytool -importcert -keystore serverkeystore -storepass password -alias cacert -file ca.crt
+
+keytool -importcert -keystore serverkeystore -storepass password -alias serverkeypair -file server.crt
+
+
+
+
+
+
+
+10. Create a server-side truststore. Name the file servertruststore (no file extension) and set the
+password to password.
+#10
+keytool -importcert -keystore servertruststore -storepass password -alias cacert -file ca.crt
+
+
+Question D: Is it possible to just make a copy of the client-side truststore,
+why or why not?
+
+
+D:
+The only reason we can see for it not being able to be copied is that the truststore
+requires a password, that should be different on the client- and server side.
+However, the contents could technically be the same apart from this fact
+
+
+
+
+
+
+
+11. There are in total six passwords used in your server and client programs (do not count CA pass-
+words). The two truststores use one password each, and the two keystores use two passwords each.
+
+Question E: What is the purpose of each password? That is, what does each password protect?
+
+For the keystore, one of the passwords is to protect the contents of the keystore,
+and the other is to protect the private key. For the truststore, we only have a
+password for the truststore itself.
