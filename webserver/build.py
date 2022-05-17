@@ -99,4 +99,4 @@ if __name__ == "__main__":
     except:
         sys.exit("Error starting flask server, just remove this part dude")
     #serving.run_simple("0.0.0.0", 5000, app, ssl_context=context)
-    app.run(debug=True, host='0.0.0.0', port='443', ssl_context=context)
+    app.run(debug=True, host='0.0.0.0', port='5000', ssl_context=context)
