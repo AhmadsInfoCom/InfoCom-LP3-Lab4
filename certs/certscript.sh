@@ -2,6 +2,7 @@
 ebbaIP=100.100.100.24
 ahmadIP=100.100.100.23
 markusIP=100.100.100.25
+browserIP=0.0.0.0
 
 #Ports:
 drone1port=5000
@@ -19,14 +20,15 @@ challengepassword=
 
 serverfolderpath=servers
 dronefolderpath=drones
+browserfolderpath=browser
 CAfolder=CA
 
 
 #The only things you need to change:
-instance=drone2
-port=$drone2port
-IP=$markusIP
-folderpath=$dronefolderpath
+instance=browser
+port=5000
+IP=$browserIP
+folderpath=$browserfolderpath   
 
 #If you move the shellscript, don't forget to update the folder names above, as well as the format on "folder" above here.
 
