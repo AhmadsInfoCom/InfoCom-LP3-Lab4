@@ -88,7 +88,7 @@ if __name__ == "__main__":
     #print("Main is run.")
     #filecreationdebugging = open("/home/newfile.txt", "x")
     if HTTPS_ENABLED:
-        context = ssl.SSLContext() # alternativt:   ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+        context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2) # alternativt:   ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
         #print("HTTPS is enabled, i.e. server needs to authenticate.")
     if VERIFY_USER:
         context.verify_mode = ssl.CERT_REQUIRED
