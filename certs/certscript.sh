@@ -44,7 +44,7 @@ openssl genrsa -out $folder/$instance.key 2048
 #Creates a certificate request:
 openssl req -new \
 -subj "/C=SE/ST=Scania/L=LUND/O=SDD/OU=$instance/CN=$domain" \
--addext "subjectAltName = DNS:localhost" \
+-addext "subjectAltName = IP:0.0.0.0" \
 -key $folder/$instance.key \
 -out $folder/$instance.csr \
 -passout pass:$challengepassword
@@ -57,6 +57,9 @@ openssl req -new \
 # "no certificate matches private key"
 # OBS! dessutom klagade den med "bad ip adress" när vi skrev med porten som subjectAltName (testade nämligen alla), både 0.0.0.0 och statiska IP-adressen....
 # ...så kan hända att du får skita i de sista två också.
+#OBS! just nu kommer dessa ändå inte med, för du har inte specificerat subject alternative names när du signerar, så det kommer inte med i out-filen. Kolla grn för en länk om det
+# ellre här: https://stackoverflow.com/questions/30977264/subject-alternative-name-not-present-in-certificate
+#där står det hur du ska göra för att ha med SAN. Det du ska göra är: extensions! plus nån wack fil.
 
 #Signs the request:
 openssl x509 -req \

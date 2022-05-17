@@ -14,7 +14,7 @@ import sys
 #from webserver.database import drone
 
 HTTPS_ENABLED = True
-VERIFY_USER=False
+VERIFY_USER=True
 
 SVR_CRT="../certs/servers/build/build.crt"
 SVR_KEY="../certs/servers/build/build.key"
