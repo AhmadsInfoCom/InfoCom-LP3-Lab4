@@ -33,7 +33,7 @@ if HTTPS_ENABLED:
 try:
     context.load_cert_chain(SVR_CERT, SVR_KEY)
 except:
-    sys.exit("Error starting flask server. " + "Missing cert or key.".format(e))
+    sys.exit("Error starting flask server, just remove this part dude")
 #serving.run_simple("0.0.0.0", 5000, app, ssl_context=context)
 
 app = Flask(__name__)
