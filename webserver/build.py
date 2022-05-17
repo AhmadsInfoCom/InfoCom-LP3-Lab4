@@ -93,7 +93,7 @@ print("outside main")
 print("__name__ equals " + __name__)
 
 
-if __name__ == "__main__": 
+if __name__ == "build": #"__main__": 
     context = None
     print("Main is run.")
     #filecreationdebugging = open("/home/debuggingtestfile.txt", "x")
