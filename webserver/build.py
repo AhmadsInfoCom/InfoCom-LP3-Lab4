@@ -31,6 +31,7 @@ if HTTPS_ENABLED:
         print("Two-way HTTPS is enabled, i.e. client needs to authenticate as well.")
 try:
     context.load_cert_chain(SVR_CERT, SVR_KEY)
+except:
     sys.exit("Error starting flask server. " + "Missing cert or key.".format(e))
 #serving.run_simple("0.0.0.0", 5000, app, ssl_context=context)
 
