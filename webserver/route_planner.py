@@ -37,7 +37,7 @@ def send_request(drone_url, coords):
 
 @app.route('/planner', methods=['POST'])
 def route_planner():
-    print("They want to give us adresses.... cute.")
+    print("They want to give us adresses... cute.")
     Addresses =  json.loads(request.data.decode())
     FromAddress = Addresses['faddr']
     ToAddress = Addresses['taddr']
@@ -111,5 +111,5 @@ if __name__ == "__main__":
         #sys.exit("Error starting flask server, idk what we've done")
     #serving.run_simple("0.0.0.0", 5000, app, ssl_context=context)
     print("App is about to run. Hold on")
-    app.run(debug=True, host='0.0.0.0', port='5002', ssl_context=context)
+    app.run(debug=False, host='0.0.0.0', port='5002', ssl_context=context)
     print("We've come past 'app.run()' now.")
