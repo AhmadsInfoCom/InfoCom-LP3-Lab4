@@ -11,6 +11,13 @@ import ssl
 
 #from webserver.database import drone
 
+HTTPS_ENABLED = True
+VERIFY_USER=False
+
+SVR_CRT="../certs/servers/servers.crt"
+SVR_KEY="../certs/servers/servers.key"
+CA_CRT="../certs/CA/ca.crt"
+
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 app.secret_key = 'dljsaklqk24e21cjn!Ew@@dsa5'
@@ -78,9 +85,17 @@ def route_planner():
 
 
 if __name__ == "__main__":
-    context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_3)
-    #context.verify_mode = ssl.CERT_REQUIRED
-    #context.load_verify_locations("../certs/CA/ca.crt")   #Vi litar på klienter med certifikat signerat av CA.
-    context.load_cert_chain('servers.crt', 'servers.key')
-    serving.run_simple("0.0.0.0", 5002, app, use_debugger=True, ssl_context=context)
-    #app.run(debug=True, host='0.0.0.0', port='5002')
+    context = None
+    print("Main is run.")
+    if HTTPS_ENABLED:
+        context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_3)
+        print("HTTPS is enabled, i.e. server needs to authenticate.")
+        if VERIFY_USER:
+            context.verify_mode = ssl.CERT_REQUIRED
+            context.load_verify_locations(CA_CRT)   #Vi litar på klienter med certifikat signerat av CA.
+            print("Two-way HTTPS is enabled, i.e. client needs to authenticate as well.")
+    try:
+        context.load_cert_chain(SVR_CERT, SVR_KEY)
+        sys.exit("Error starting flask server. " + "Missing cert or key.".format(e))
+    #serving.run_simple("0.0.0.0", 5000, app, ssl_context=context)
+    app.run(debug=True, host='0.0.0.0', port='5000', ssl_context=context)

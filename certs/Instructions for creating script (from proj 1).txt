@@ -17,12 +17,12 @@ combination with -CA the initial serial number is set to a random one.
 
 DRONEPROJECT:
 Skapade filen privkey.pm och ca.crt i mappen certs/CA
-PEM pass phrase: servercertCA
-Name: CA
+PEM pass phrase: realCA
+Name: localhost
 
 Skapade filen privkey.pm och fakeca.crt i mappen certs/fakeCA
 PEM pass phrase: fakeCA
-Name: fakeCA
+Name: localhost
 
 
 

@@ -32,7 +32,7 @@ flask run --port=5002 --host 0.0.0.0
 ```
 
 ## On the Drone Pis:
-You need to install the Python packages in the requirements if you havn't done any. 
+You need to install the Python packages in the requirements if you haven't done any. 
 
 Go to `/pi`, run `drone.py`
 ```
@@ -41,5 +41,5 @@ export FLASK_ENV=development
 flask run --host 0.0.0.0
 ```
 
-Note: Don't user `python3 build.py` to run the servers, since this does not porvide all the functionalities requied by the application.
+Note: Don't use `python3 build.py` to run the servers, since this does not porvide all the functionalities required by the application.
 
