@@ -89,9 +89,8 @@ drone1array = pickle.loads(redis_server.get('drone1')) #.decode()
 
 
 
-print("outside main")
-print("__name__ equals " + __name__)
 
+print("__name__ equals " + __name__)
 
 if __name__ == "__main__": 
     context = None
@@ -113,4 +112,4 @@ if __name__ == "__main__":
     #serving.run_simple("0.0.0.0", 5000, app, ssl_context=context)
     print("App is about to run. Hold on")
     app.run(debug=True, host='0.0.0.0', port='5000', ssl_context=context)
-    print("Past app.run() now.")
+    print("We've come past 'app.run()' now.")
