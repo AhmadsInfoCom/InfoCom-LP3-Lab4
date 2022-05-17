@@ -8,6 +8,7 @@ import json
 import requests
 from werkzeug import serving
 import ssl
+import sys
 
 #from webserver.database import drone
 
@@ -111,5 +112,5 @@ if __name__ == "__main__":
         #sys.exit("Error starting flask server, idk what we've done")
     #serving.run_simple("0.0.0.0", 5000, app, ssl_context=context)
     print("App is about to run. Hold on")
-    app.run(debug=True, host='0.0.0.0', port='5002')
+    app.run(debug=True, host='0.0.0.0', port='5002', ssl_context=context)
     print("We've come past 'app.run()' now.")
