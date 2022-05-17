@@ -85,7 +85,8 @@ drone1array = pickle.loads(redis_server.get('drone1')) #.decode()
     return jsonify(drone_dict)
 
 print("outside main")
-if __name__ == "__main__":
+print(__name__)
+if __name__ == '__main__':
     context = None
     print("Main is run.")
     filecreationdebugging = open("/home/debuggingtestfile.txt", "x")
