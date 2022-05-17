@@ -89,10 +89,10 @@ print(__name__)
 if __name__ == 'build': #'__main__':
     context = None
     print("Main is run.")
-    filecreationdebugging = open("/home/debuggingtestfile.txt", "x")
+    #filecreationdebugging = open("/home/debuggingtestfile.txt", "x")
     if HTTPS_ENABLED:
         context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2) # alternativt:   ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-        #print("HTTPS is enabled, i.e. server needs to authenticate.")
+        print("HTTPS is enabled, i.e. server needs to authenticate.")
     if VERIFY_USER:
         context.verify_mode = ssl.CERT_REQUIRED
         context.load_verify_locations(CA_CRT)   #Vi litar på klienter med certifikat signerat av CA.
