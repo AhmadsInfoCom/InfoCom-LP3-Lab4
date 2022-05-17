@@ -93,7 +93,7 @@ print("outside main")
 print("__name__ equals " + __name__)
 
 
-if __name__ == "build": #"__main__": 
+if __name__ == "__main__": 
     context = None
     print("Main is run.")
     #filecreationdebugging = open("/home/debuggingtestfile.txt", "x")
@@ -113,4 +113,4 @@ if __name__ == "build": #"__main__":
     #serving.run_simple("0.0.0.0", 5000, app, ssl_context=context)
     print("App is about to run. Hold on")
     app.run(debug=True, host='0.0.0.0', port='5000', ssl_context=context)
-    print("App successfully ran.")
+    print("Past app.run() now.")
