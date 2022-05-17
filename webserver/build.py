@@ -99,7 +99,10 @@ if __name__ == 'build': #'__main__':
         print("Two-way HTTPS is enabled, i.e. client needs to authenticate as well.")
     try:
         context.load_cert_chain(SVR_CERT, SVR_KEY)
+        print("Cert and key loaded into context.")
     except:
         sys.exit("Error starting flask server, idk what we've done")
     #serving.run_simple("0.0.0.0", 5000, app, ssl_context=context)
+    print("App is about to run. Hold on")
     app.run(debug=True, host='0.0.0.0', port='5000', ssl_context=context)
+    print("App successfully ran.")
