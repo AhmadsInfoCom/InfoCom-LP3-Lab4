@@ -85,19 +85,18 @@ def get_drones():
 
 if __name__ == "__main__":
     context = None
-#print("Main is run.")
-#filecreationdebugging = open("/home/newfile.txt", "x")
-if HTTPS_ENABLED:
+    #print("Main is run.")
+    #filecreationdebugging = open("/home/newfile.txt", "x")
+    if HTTPS_ENABLED:
     context = ssl.SSLContext() # alternativt:   ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
     #print("HTTPS is enabled, i.e. server needs to authenticate.")
     if VERIFY_USER:
         context.verify_mode = ssl.CERT_REQUIRED
         context.load_verify_locations(CA_CRT)   #Vi litar på klienter med certifikat signerat av CA.
         print("Two-way HTTPS is enabled, i.e. client needs to authenticate as well.")
-try:
+    try:
     context.load_cert_chain(SVR_CERT, SVR_KEY)
-except:
+    except:
     sys.exit("Error starting flask server, just remove this part dude")
     #serving.run_simple("0.0.0.0", 5000, app, ssl_context=context)
     app.run(debug=True, host='0.0.0.0', port='5000', ssl_context=context)
-    
