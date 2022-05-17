@@ -16,8 +16,8 @@ import sys
 HTTPS_ENABLED = True
 VERIFY_USER=False
 
-SVR_CRT="../certs/servers/servers.crt"
-SVR_KEY="../certs/servers/servers.key"
+SVR_CRT="../certs/servers/build/build.crt"
+SVR_KEY="../certs/servers/build/build.key"
 CA_CRT="../certs/CA/ca.crt"
 
 app = Flask(__name__)
@@ -77,7 +77,8 @@ def get_drones():
         drone_dict.update(drone) 
     
     '''
-    drone1array = pickle.loads(redis_server.get('drone1')) #.decode()
+
+drone1array = pickle.loads(redis_server.get('drone1')) #.decode()
     drone2array = pickle.loads(redis_server.get('drone2'))  #.decode()
     '''
                                                                                                                        
@@ -85,8 +86,8 @@ def get_drones():
 
 if __name__ == "__main__":
     context = None
-    #print("Main is run.")
-    #filecreationdebugging = open("/home/newfile.txt", "x")
+    print("Main is run.")
+    filecreationdebugging = open("/home/debuggingtestfile.txt", "x")
     if HTTPS_ENABLED:
         context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2) # alternativt:   ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
         #print("HTTPS is enabled, i.e. server needs to authenticate.")
@@ -97,6 +98,6 @@ if __name__ == "__main__":
     try:
         context.load_cert_chain(SVR_CERT, SVR_KEY)
     except:
-        sys.exit("Error starting flask server, just remove this part dude")
+        sys.exit("Error starting flask server, idk what we've done")
     #serving.run_simple("0.0.0.0", 5000, app, ssl_context=context)
     app.run(debug=True, host='0.0.0.0', port='5000', ssl_context=context)
