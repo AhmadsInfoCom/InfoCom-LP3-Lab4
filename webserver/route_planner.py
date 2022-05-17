@@ -37,6 +37,7 @@ def send_request(drone_url, coords):
 
 @app.route('/planner', methods=['POST'])
 def route_planner():
+    print("They want to give us adresses.... cute.")
     Addresses =  json.loads(request.data.decode())
     FromAddress = Addresses['faddr']
     ToAddress = Addresses['taddr']
