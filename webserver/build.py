@@ -77,8 +77,7 @@ def get_drones():
         drone_dict.update(drone) 
     
     '''
-
-drone1array = pickle.loads(redis_server.get('drone1')) #.decode()
+    drone1array = pickle.loads(redis_server.get('drone1')) #.decode()
     drone2array = pickle.loads(redis_server.get('drone2'))  #.decode()
     '''
                                                                                                                        
