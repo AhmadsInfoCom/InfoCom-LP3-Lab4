@@ -7,7 +7,7 @@ from werkzeug import serving
 import ssl
 
 HTTPS_ENABLED = True
-VERIFY_USER=True
+VERIFY_USER=False
 
 SVR_CRT="../certs/drone1/drone1.crt"
 SVR_KEY="../certs/drone1/drone1.key"
@@ -16,7 +16,6 @@ CA_CRT="../certs/CA/ca.crt"
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 app.secret_key = 'dljsaklqk24e21cjn!Ew@@dsa5'
-
 
 #Give a unique ID for the drone
 #===================================================================
