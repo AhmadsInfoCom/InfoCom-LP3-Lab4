@@ -45,20 +45,24 @@ folder=$folderpath/$instance
 #testa ändra common name till bara ip, istället för ip+port (isf kan du bara ta bort "domain" lol)
 #^BEHÖVDES EJ, FUNKADE ÄNDÅ :-)
 
-#Men problem att webbrowsern promptar för klientcertifikat. Hur få bort det?
+#Men ev. problem att webb-browser promptar för klientcertifikat, det gör att route_planner inte funkar bra. Hur få bort det?
+
+#Dessa löser problemet:
+# https://stackoverflow.com/questions/30769142/firefox-automatically-choose-certificate-without-ui-dialog 
+# https://stackoverflow.com/questions/27864553/how-can-i-choose-a-different-client-certificate-in-firefox 
+
+#Dessa är extra, just in case det behövs:
 # https://stackoverflow.com/questions/6108091/is-it-possible-to-automatically-select-correct-client-side-certificate
 # https://stackoverflow.com/questions/40653785/how-to-stop-chromes-select-a-certificate-window 
 # https://stackoverflow.com/questions/33098570/how-to-disable-client-certificate-prompt-in-google-chrome
 # https://stackoverflow.com/questions/1331722/client-certificates-and-firefox 
 # https://serverfault.com/questions/1068169/how-to-make-firefox-prompt-for-windowss-own-certificate-stores-client-certific
-
 # https://blogs.sap.com/2014/01/30/avoid-certification-selection-popup-in-chrome/  
 # https://techcommunity.microsoft.com/t5/discussions/is-there-a-way-to-set-autoselectcertificateforurls-policy-on/m-p/2256289 
 # https://gist.github.com/IngussNeilands/3bbbb7d78954c85e2e988cf3bfec7caa 
-
-# https://stackoverflow.com/questions/30769142/firefox-automatically-choose-certificate-without-ui-dialog 
 # https://docs.microsoft.com/en-us/answers/questions/570440/the-edge-chromium-39autoselectcertificateforurls39.html
 # https://techcommunity.microsoft.com/t5/enterprise/how-do-i-setup-autocertificateselectforurls-in-the-registry-to/m-p/1149019
+
 
 
 
